@@ -72,7 +72,9 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
                      case LAErrorTouchIDNotEnrolled:
                          errorReason = @"LAErrorTouchIDNotEnrolled";
                          break;
-
+                     case LAErrorTouchIDLockout:
+                         errorReason = @"LAErrorTouchIDLockout";  // 用户错误次数太多，现在被锁住了
+                         break;
                      default:
                          errorReason = @"RCTTouchIDUnknownError";
                          break;
@@ -89,6 +91,35 @@ RCT_EXPORT_METHOD(authenticate: (NSString *)reason
     } else {
         callback(@[RCTMakeError(@"RCTTouchIDNotSupported", nil, nil)]);
         return;
+    }
+}
+
+//验证锁屏密码
+RCT_EXPORT_METHOD(requestTouchIDLockout: (NSString *)reason callback: (RCTResponseSenderBlock)callback){
+    
+    NSString *version = [UIDevice currentDevice].systemVersion;
+    if (version.doubleValue < 9.0) {
+        return;
+    }
+    LAContext *context = [[LAContext alloc] init];
+    NSError *error;
+    
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&error]) {
+        // Attempt Authentification
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication
+                localizedReason:reason
+                          reply:^(BOOL success, NSError *error)
+         {
+             if (success) {
+                 callback(@[[NSNull null], @"Authenticated with Touch ID."]);
+             } else if(error){
+                 callback(@[RCTMakeError(@"LAErrorAuthenticationFailed", nil, nil)]);
+             } else {
+                 callback(@[RCTMakeError(@"LAErrorAuthenticationFailed", nil, nil)]);
+             }
+         }];
+    } else{
+        callback(@[RCTMakeError(@"Authentication Not Supported", nil, nil)]);
     }
 }
 

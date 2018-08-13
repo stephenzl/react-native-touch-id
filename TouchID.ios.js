@@ -40,6 +40,21 @@ export default {
         resolve(true);
       });
     });
+  },
+
+  requestTouchIDLockout(reason) {
+    const authReason = reason ? reason : ' ';
+
+    return new Promise((resolve, reject) => {
+      NativeTouchID.requestTouchIDLockout(authReason, error => {
+        // Return error if rejected
+        if (error) {
+          return reject(createError(error.message));
+        }
+
+        resolve(true);
+      });
+    });
   }
 };
 
