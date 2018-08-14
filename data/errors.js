@@ -20,6 +20,12 @@ module.exports = {
   LAErrorTouchIDNotEnrolled: {
     message: 'Authentication could not start because Touch ID has no enrolled fingers.'
   },
+  LAErrorTouchIDLockout: {
+    message: 'Authenticate failed too much times.'
+  },
+  LAErrorPolicyDeviceOwnerAuthentication: {
+    message: 'Donot have the method PolicyDeviceOwnerAuthentication.'
+  },
   RCTTouchIDUnknownError: {
     message: 'Could not authenticate for an unknown reason.'
   },
