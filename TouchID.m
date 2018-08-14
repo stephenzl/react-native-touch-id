@@ -119,7 +119,7 @@ RCT_EXPORT_METHOD(requestTouchIDLockout: (NSString *)reason callback: (RCTRespon
              }
          }];
     } else{
-        callback(@[RCTMakeError(@"LAErrorPolicyDeviceOwnerAuthentication, nil, nil)]);
+        callback(@[RCTMakeError(@"LAErrorPolicyDeviceOwnerAuthentication", nil, nil)]);
     }
 }
 
